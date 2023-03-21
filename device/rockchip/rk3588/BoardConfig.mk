@@ -1,0 +1,1 @@
+BoardConfig-rk3588-evb1-lp4-v10.mk
