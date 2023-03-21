@@ -1,0 +1,14 @@
+## Patches with a number < 100 are applied in debian.
+## Ubuntu patches start with 100.
+001_fedora_extramodes.patch
+02_kbsd-input-devd.diff
+03_static-nettle.diff
+04_compiler_h_inb_outb_mips.diff
+05_Revert-Unload-submodules.diff
+06_use-intel-only-on-pre-gen4.diff
+07_use-modesetting-driver-by-default-on-GeForce.diff
+08_xkb-switch-to-array-index-loops-to-moving-pointers.patch
+09_xkb-add-request-length-validation-for-XkbSetGeometry.patch
+10_xkb-swap-XkbSetDeviceInfo-and-XkbSetDeviceInfoCheck.patch
+11_xkb-proof-GetCountedString-against-request-length-at.patch
+12_xkb-fix-some-possible-memleaks-in-XkbGetKbdByName.patch
