@@ -11,7 +11,7 @@
 
 / {
 	model = "bpi-p2pro";
-	compatible = "radxa,rockpis", "rockchip,rk3308";
+	compatible = "ydtx,bpi-p2pro", "rockchip,rk3308";
 
 	chosen {
 		bootargs = "earlycon=uart8250,mmio32,0xff0c0000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rootfstype=ext4 rootwait snd_aloop.index=7 snd_aloop.use_raw_jiffies=1";
@@ -90,6 +90,7 @@
 		compatible = "regulator-fixed";
 		gpio = <&gpio4 RK_PD6 GPIO_ACTIVE_LOW>;
 		regulator-name = "vcc_sd";
+		regulator-boot-on;
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
 	};
@@ -147,6 +148,13 @@
 		regulator-name = "vcc_otg_vbus";
 	};
 
+	ext_gmac: gmac-clk {
+		compatible = "fixed-clock";
+		clock-frequency = <125000000>;
+		clock-output-names = "ext_gmac";
+		#clock-cells = <0>;
+	};
+
 	bt_uart4: wireless_bluetooth: wireless-bluetooth {
 		compatible = "bluetooth-platdata";
 		uart_rts_gpios = <&gpio4 RK_PA7 GPIO_ACTIVE_LOW>;
@@ -163,7 +171,7 @@
 		rockchip,grf = <&grf>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&wifi_wake_host>;
-		wifi_chip_type = "ap6255";
+		wifi_chip_type = "ap6256";
 		WIFI,host_wake_irq = <&gpio0 RK_PA0 GPIO_ACTIVE_HIGH>;
 		status = "okay";
 	};
@@ -174,17 +182,25 @@
 		status = "okay";
 
 		green-led {
-			label = "rockpis:green:power";
+			label = "blue:power";
 			gpios = <&gpio0 6 GPIO_ACTIVE_HIGH>;
 			linux,default-trigger = "default-on";
 			default-state = "on";
 		};
 
 		blue-led {
-			label = "rockpis:blue:user";
+			label = "green:user";
 			gpios = <&gpio0 5 GPIO_ACTIVE_HIGH>;
 			linux,default-trigger = "heartbeat";
 			default-state = "on";
+		};
+	};
+
+	breathing_light {
+		compatible = "lhd,breathing_light_test";
+		backlight {
+			pwms = <&pwm3 0 25000 0>;
+			pwm-names = "breathing_light"; 
 		};
 	};
 
@@ -196,6 +212,12 @@
 		rockchip,cpu = <&i2s_8ch_2>;
 		rockchip,codec = <&acodec>;
      };
+};
+
+&pwm3 {
+	status = "okay";
+	pinctrl-names = "active";
+	pinctrl-0 = <&pwm3_pin_pull_down>;
 };
 
 &cpu0 {
@@ -223,6 +245,7 @@
 &sdmmc {
 	max-frequeency = <150000000>;
 	supports-sd;
+	supports-emmc;
 	bus-width = <4>;
 	cap-mmc-highspeed;
 	cap-sd-highspeed;
@@ -232,7 +255,7 @@
 	vqmmc-supply = <&vccio_sd>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&sdmmc_clk &sdmmc_cmd &sdmmc_det &sdmmc_bus4>;
-	ard-detect-delay = <800>;
+	card-detect-delay = <800>;
 	status = "okay";
 };
 
@@ -243,11 +266,15 @@
 	status = "okay";
 };
 
+&ext_gmac{
+ 	clock-frequency = <50000000>;
+};
+
 &mac {
 	phy-supply = <&vcc_phy>;
-	clock_in_out = "output";
+	clock_in_out = "input";
 	assigned-clocks = <&cru SCLK_MAC>;
-	assigned-clock-parents = <&cru SCLK_MAC_SRC>;
+	assigned-clock-parents = <&ext_gmac>;
 	snps,reset-gpio = <&gpio0 RK_PA7 GPIO_ACTIVE_LOW>;
 	snps,reset-active-low;
 	snps,reset-delays-us = <0 50000 50000>;
@@ -373,6 +400,7 @@
 };
 
 &acodec {
+	hp-ctl-gpios = <&gpio0 RK_PA1 GPIO_ACTIVE_HIGH>;
 	status = "okay";
 };
 
