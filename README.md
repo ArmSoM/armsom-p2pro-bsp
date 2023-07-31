@@ -2,7 +2,9 @@
 
 * Hardware requirements: 64-bit system with more than 40 GB disk space. If you do multiple builds, you will need more hard disk space.
 
-* Software requirements: Ubuntu 20.04 system:
+* Software requirements: Ubuntu 20.04 system
+
+Suggest developing Ubuntu 20.04 system or higher
 
 ### 1、Install libraries and toolsets：
 
