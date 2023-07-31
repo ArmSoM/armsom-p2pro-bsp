@@ -58,7 +58,7 @@ Copy the SDK to your working directory under ubuntu
 git clone https://github.com/ArmSoM/armsom-p2pro-bsp
 ```
 
-###1、 compilation command
+### 1、 compilation command
 
 * View compilation command
 ```
@@ -119,7 +119,7 @@ export RK_ROOTFS_SYSTEM=debian
 ...
 ```
 
-###2、 kernel Build Command
+### 2、 kernel Build Command
 To customize the kernel, run the following command
 ```
 cd kernel
