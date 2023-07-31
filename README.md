@@ -1,20 +1,20 @@
 ## Compile environment
 
-* Hardware requirements: 64-bit system with more than 40 GB disk space. If you do multiple builds, you will need more hard disk space.
+* Hardware requirements: 64-bit system with more than 40 GB disk space. If you do multiple builds, you will need more hard disk space
 
 * Software requirements: Ubuntu 20.04 system
 
-Suggest developing Ubuntu 20.04 system or higher
+Suggest developing Ubuntu 20.04 system or higher。
 
-### 1、Install libraries and toolsets：
+### 1、Install libraries and toolsets
 
 ```shell
 sudo apt-get install git ssh make gcc libssl-dev liblz4-tool expect g++ patchelf chrpath gawk texinfo chrpath diffstat binfmt-support qemu-user-static live-build bison flex fakeroot cmake gcc-multilib g++-multilib unzip device-tree-compiler ncurses-dev libgucharmap-2-90-dev bzip2 expat gpgv2 cpp-aarch64-linux-gnu time mtd-utils
 ```
 
-### 2、Check and upgrade software packages：
+### 2、Check and upgrade software packages
 
-If there is a compilation error in the future, it may be due to the incorrect version of the compilation tool, the following two examples may be updated
+If there is a compilation error in the future, it may be due to the incorrect version of the compilation tool, the following two examples may be updated。
 
 - Check the make version (make 4.0 and above required)
 ```
@@ -36,7 +36,7 @@ sudo install -m 0755 make /usr/bin/make
 ```
 
 
-- Check the lz4 version (lz4 1.7.3 or later is required).
+- Check the lz4 version (lz4 1.7.3 or later is required)
 ```
 lz4 -v
 *** LZ4 command line interface 64-bits v1.9.4, by Yann Collet ***
@@ -54,7 +54,7 @@ sudo install -m 0755 lz4 /usr/bin/lz4
 
 ## Configuration framework description
 
-Copy the SDK to your working directory under ubuntu
+Copy the SDK to your working directory under ubuntu：
 
 ```
 git clone https://github.com/ArmSoM/armsom-p2pro-bsp
@@ -122,7 +122,7 @@ export RK_ROOTFS_SYSTEM=debian
 ```
 
 ### 2、 kernel Build Command
-To customize the kernel, run the following command
+To customize the kernel, run the following command：
 ```
 cd kernel
 make ARCH=arm64 rk3308_linux_defconfig
@@ -132,5 +132,5 @@ cp .config arch/arm/configs/rk3308_linux_defconfig
 ```
 
 ## Use development board
-There is a [wiki](http://wiki.armsom.org/index.php/Getting_Started_with_ArmSoM-p2_pro "悬停显示") documentation on how to use the development board
+There is a [wiki](http://wiki.armsom.org/index.php/Getting_Started_with_ArmSoM-p2_pro "悬停显示") documentation on how to use the development board。
 
