@@ -1,22 +1,71 @@
-#version number
+## Compile environment
 
-rk3308_linux5.10_release_v1.0.3_20221220.xml
+* Hardware requirements: 64-bit system with more than 40 GB disk space. If you do multiple builds, you will need more hard disk space.
 
+* Software requirements: Ubuntu 20.04 system:
 
-## SDK编译环境搭建
+### 1、Install libraries and toolsets：
 
-### 1、安装库和工具集：
 ```shell
 sudo apt-get install git ssh make gcc libssl-dev liblz4-tool expect g++ patchelf chrpath gawk texinfo chrpath diffstat binfmt-support qemu-user-static live-build bison flex fakeroot cmake gcc-multilib g++-multilib unzip device-tree-compiler ncurses-dev libgucharmap-2-90-dev bzip2 expat gpgv2 cpp-aarch64-linux-gnu time mtd-utils
 ```
 
-### 2、拷贝至工作目录
+### 2、Check and upgrade software packages：
+
+If there is a compilation error in the future, it may be due to the incorrect version of the compilation tool, the following two examples may be updated
+
+- Check the make version (make 4.0 and above required)
+```
+make -v
+GNU Make 4.2
+Built for x86_64-pc-linux-gnu
+```
+
+- Upgrade make version
+```
+git clone https://github.com/mirror/make.git
+cd make
+git checkout 4.2
+git am $BUILDROOT_DIR/package/make/*.patch
+autoreconf -f -i
+./configure
+make make -j8
+sudo install -m 0755 make /usr/bin/make
+```
+
+
+- Check the lz4 version (lz4 1.7.3 or later is required).
+```
+lz4 -v
+*** LZ4 command line interface 64-bits v1.9.4, by Yann Collet ***
+refusing to read from a console
+```
+
+- Upgrade lz4 version
+```
+git clone https://github.com/lz4/lz4.git
+cd lz4
+make
+sudo make install
+sudo install -m 0755 lz4 /usr/bin/lz4
+```
+
+## Configuration framework description
+
+Copy the SDK to your working directory under ubuntu
 
 ```
 git clone https://github.com/ArmSoM/armsom-p2pro-bsp
 ```
 
-###3、 SDK编译命令
+###1、 compilation command
+
+* View compilation command
+```
+./build.sh -h
+```
+
+* Select the configuration file for the development board
 ```
 ./build.sh lunch
 You're building on Linux
@@ -35,27 +84,33 @@ Lunch menu...pick a combo:
 Which would you like? [0]: 3
 ```
 
-###4、全自动编译
+* Full automatic compilation
 ```
-./build.sh all # 只编译模块代码（u-Boot，kernel，Rootfs，Recovery）
-# 需要再执⾏./mkfirmware.sh 进⾏固件打包
-./build.sh # 编译模块代码（u-Boot，kernel，Rootfs，Recovery）
-# 打包成update.img完整升级包
-# 所有编译信息复制和⽣成到out⽬录下
+./build.sh all # Only compile module code (u-Boot, kernel, Rootfs, Recovery)
+
+# Need to run./mkfirmware.sh to package the firmware
+
+
+
+./build.sh # Compile module code (u-Boot, kernel, Rootfs, Recovery)
+
+# Pack as update.img full upgrade package
+
+# All compilation information is copied and generated into the out directory
 ```
-默认是 Buildroot，可以通过设置坏境变量 RK_ROOTFS_SYSTEM 指定不同 rootfs。 
 
-RK_ROOTFS_SYSTEM ⽬前可设定三种系统：buildroot、debian、 yocto 。
+The default is to compile the Buildroot system. You can specify different rootfs by setting the RK_ROOTFS_SYSTEM.
 
-比如需要生成debian的命令如下：
+RK_ROOTFS_SYSTEM You can set three types of systems: buildroot, debian, and yocto.
+
+For example, the command to generate debian is as follows:
 
 ```
 export RK_ROOTFS_SYSTEM=debian
 ./build.sh
 ```
 
-###5、模块编译
-
+* module compilation
 ```
 ./build.sh uboot
 ./build.sh kernel
@@ -63,3 +118,17 @@ export RK_ROOTFS_SYSTEM=debian
 ./build.sh rootfs
 ...
 ```
+
+###2、 kernel Build Command
+To customize the kernel, run the following command
+```
+cd kernel
+make ARCH=arm64 rk3308_linux_defconfig
+make ARCH=arm64 menuconfig
+make ARCH=arm savedefconfig
+cp .config arch/arm/configs/rk3308_linux_defconfig
+```
+
+## Use development board
+There is a [wiki](http://wiki.armsom.org/index.php/Getting_Started_with_ArmSoM-p2_pro "悬停显示") documentation on how to use the development board
+
